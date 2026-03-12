@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karaokê + YouTube </title>
+    <title>Karaokê + YouTube - GarraPlay</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <style>
@@ -45,7 +45,7 @@
             <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <span class="text-3xl">🎤</span>
-                    <h1 class="text-2xl font-bold text-yellow-400">Karaokê On-line</h1>
+                    <h1 class="text-2xl font-bold text-yellow-400">GarraKaraokê</h1>
                 </div>
                 <div class="flex gap-3">
                     <button onclick="setMode(1)" id="btnKaraoke"
@@ -91,14 +91,12 @@
         </div>
     </div>
 
-    <!-- MODAL CONFIRMAÇÃO (igual ao antigo Blockly) -->
+    <!-- MODAL CONFIRMAÇÃO -->
     <div id="modalConfirm" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-[100]">
         <div class="modal bg-zinc-900 rounded-3xl w-full max-w-lg mx-4 overflow-hidden">
             <div class="p-8">
                 <h2 class="text-2xl font-bold text-center mb-6 text-yellow-400">CONFIRMAR ENVIO</h2>
-                <div id="modalText" class="text-center text-lg leading-relaxed min-h-[160px] text-zinc-300">
-                    <!-- Aqui aparece exatamente como no antigo: Cantor / Música / Código ou ID -->
-                </div>
+                <div id="modalText" class="text-center text-lg leading-relaxed min-h-[160px] text-zinc-300"></div>
             </div>
             
             <div class="grid grid-cols-2 border-t border-zinc-700">
@@ -111,7 +109,6 @@
     </div>
 
     <script>
-        // ====================== CONFIGURAÇÕES ======================
         const CHAMADA_KARAOKE = "https://script.google.com/macros/s/AKfycbzls4exI8TPw492Cx5RosSRbF10S4J-zEJkEBbyvFqZIXjGn9lWYGzTdGrq5qq2TwD7/exec?pesquisa=";
         const URL_YOUTUBE_BASE = "https://sbx.garraplay.shop/search?q=";
         const URL_ENVIAR = "https://script.google.com/macros/s/AKfycbxrlggLTeIXvbeP0T4RI4uIKgfO2sJsRiTtnXqixaEBnA2FYxLXS0MLCz55aMbe2iSl/exec?id=";
@@ -120,7 +117,6 @@
         let currentMode = 2;
         let currentSelected = null;
 
-        // ====================== LOGIN ======================
         function fazerLogin() {
             const id = document.getElementById("pairingInput").value.trim();
             if (!id) return alert("Digite seu ID de pareamento!");
@@ -137,7 +133,6 @@
             document.getElementById("btnYoutube").classList.toggle("active-mode", mode === 2);
         }
 
-        // ====================== BUSCAR ======================
         async function buscar() {
             const query = document.getElementById("searchInput").value.trim();
             if (!query) return alert("Digite algo para pesquisar!");
@@ -171,32 +166,57 @@
             }
         }
 
-        // ====================== RENDER CARDS ======================
+        // ====================== CARDS COM EVENT LISTENER (AGORA SEM ERRO NO CLIQUE) ======================
         function renderCards(items, mode) {
             const resultsDiv = document.getElementById("results");
             resultsDiv.innerHTML = "";
+            
             if (!items || items.length === 0) {
                 resultsDiv.innerHTML = `<p class="col-span-full text-center py-20 text-zinc-400">Nenhum resultado encontrado</p>`;
                 return;
             }
+
             items.forEach(item => {
-                let cardHTML = mode === 1 
-                    ? `<div onclick="abrirConfirmacao(${JSON.stringify(item)})" class="card bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer border border-zinc-700">
-                        <div class="p-6"><div class="flex justify-between"><div><p class="font-bold text-lg">${item.CANTOR || item.cantor || 'Desconhecido'}</p><p class="text-yellow-400 mt-1">${item.MUSICA || item.musica}</p></div><div class="bg-emerald-500 text-black text-xs font-mono px-3 py-1 rounded-full">${item.NUMERO || item.numero}</div></div></div></div>`
-                    : `<div onclick="abrirConfirmacao(${JSON.stringify(item)})" class="card bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer">
-                        <div class="relative"><img src="${item.thumbnail}" class="w-full aspect-video object-cover"><div class="absolute bottom-3 right-3 bg-black/80 text-white text-xs px-3 py-1 rounded font-mono">${item.duration}</div></div>
-                        <div class="p-5"><p class="line-clamp-3 font-medium">${item.title}</p></div></div>`;
-                resultsDiv.innerHTML += cardHTML;
+                const card = document.createElement("div");
+                card.className = "card bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer";
+
+                if (mode === 1) {
+                    card.innerHTML = `
+                        <div class="p-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="font-bold text-lg">${item.CANTOR || item.cantor || 'Desconhecido'}</p>
+                                    <p class="text-yellow-400 mt-1">${item.MUSICA || item.musica}</p>
+                                </div>
+                                <div class="bg-emerald-500 text-black text-xs font-mono px-3 py-1 rounded-full">
+                                    ${item.NUMERO || item.numero}
+                                </div>
+                            </div>
+                        </div>`;
+                } else {
+                    card.innerHTML = `
+                        <div class="relative">
+                            <img src="${item.thumbnail}" class="w-full aspect-video object-cover">
+                            <div class="absolute bottom-3 right-3 bg-black/80 text-white text-xs px-3 py-1 rounded font-mono">
+                                ${item.duration}
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <p class="line-clamp-3 font-medium">${item.title}</p>
+                        </div>`;
+                }
+
+                // ←←← AQUI ESTÁ A CORREÇÃO: clique seguro com addEventListener
+                card.addEventListener("click", () => abrirConfirmacao(item));
+                resultsDiv.appendChild(card);
             });
         }
 
-        // ====================== MODAL (EXATAMENTE COMO NO ANTIGO) ======================
         function abrirConfirmacao(item) {
             currentSelected = item;
             let html = "";
-            
+
             if (currentMode === 1) {
-                // KARAOKE - mostra código da música
                 html = `
                     <strong class="text-emerald-400">KARAOKE</strong><br>
                     <span class="text-2xl">${item.CANTOR || item.cantor || ''}</span><br><br>
@@ -204,7 +224,6 @@
                     <span class="text-sm text-zinc-500">CÓDIGO: <strong>${item.NUMERO || item.numero}</strong></span>
                 `;
             } else {
-                // YOUTUBE - mostra ID
                 html = `
                     <strong class="text-red-400">YOUTUBE</strong><br>
                     <span class="text-xl">${item.title}</span><br><br>
@@ -212,7 +231,7 @@
                     <span class="text-sm text-zinc-500">ID: <strong>${item.id}</strong></span>
                 `;
             }
-            
+
             document.getElementById("modalText").innerHTML = html;
             document.getElementById("modalConfirm").classList.remove("hidden");
         }
@@ -221,23 +240,18 @@
             document.getElementById("modalConfirm").classList.add("hidden");
         }
 
-        // ====================== CONFIRMAR ENVIO (igual ao antigo) ======================
         async function confirmarEnvio() {
             if (!currentSelected || !pairingId) return;
             
-            let numeroParaEnviar = "";
-            
-            if (currentMode === 1) {
-                numeroParaEnviar = currentSelected.NUMERO || currentSelected.numero;
-            } else {
-                numeroParaEnviar = "youtube" + currentSelected.id;   // exatamente como no Blockly antigo
-            }
+            let numeroParaEnviar = currentMode === 1 
+                ? (currentSelected.NUMERO || currentSelected.numero)
+                : "youtube" + currentSelected.id;
             
             const url = `${URL_ENVIAR}${pairingId}&numero=${numeroParaEnviar}`;
             
             try {
                 await fetch(url);
-                alert("✅ Enviado com sucesso!\n\nCódigo enviado: " + numeroParaEnviar);
+                alert("✅ Enviado com sucesso!\nCódigo/ID enviado: " + numeroParaEnviar);
             } catch (e) {
                 alert("❌ Erro ao enviar");
             }
@@ -247,12 +261,7 @@
         async function cancelarMusica() {
             if (!pairingId) return alert("Faça login primeiro!");
             const url = `${URL_ENVIAR}${pairingId}&numero=11111111110`;
-            try {
-                await fetch(url);
-                alert("⏹️ Música cancelada!");
-            } catch (e) {
-                alert("Erro ao cancelar");
-            }
+            try { await fetch(url); alert("⏹️ Música cancelada!"); } catch(e) { alert("Erro ao cancelar"); }
         }
 
         window.onload = () => {
