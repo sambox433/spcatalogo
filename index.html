@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karaokê + YouTube - GarraPlay</title>
+    <title>Karaokê + YouTube</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <style>
@@ -26,84 +26,47 @@
             <h1 class="text-3xl font-bold mb-2">Bem-vindo ao Karaokê Online</h1>
             <p class="text-zinc-400 mb-8">Digite seu ID de pareamento</p>
             
-            <input id="pairingInput" 
-                   type="text" 
-                   placeholder="🗝️ ID PAREAMENTO"
-                   class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-400 mb-6">
-            
-            <button onclick="fazerLogin()"
-                    class="w-full bg-violet-600 hover:bg-violet-500 py-4 rounded-2xl font-bold text-lg transition">
-                ENTRAR
-            </button>
+            <input id="pairingInput" type="text" placeholder="🗝️ ID PAREAMENTO" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-400 mb-6">
+            <button onclick="fazerLogin()" class="w-full bg-violet-600 hover:bg-violet-500 py-4 rounded-2xl font-bold text-lg transition">ENTRAR</button>
         </div>
     </div>
 
     <!-- TELA PRINCIPAL -->
     <div id="mainScreen" class="hidden min-h-screen">
-        <!-- Header -->
         <div class="bg-zinc-900 border-b border-zinc-800 sticky top-0 z-50">
             <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <span class="text-3xl">🎤</span>
-                    <h1 class="text-2xl font-bold text-yellow-400">GarraKaraokê</h1>
-                </div>
+                <div class="flex items-center gap-3"><span class="text-3xl">🎤</span><h1 class="text-2xl font-bold text-yellow-400">GarraKaraokê</h1></div>
                 <div class="flex gap-3">
-                    <button onclick="setMode(1)" id="btnKaraoke"
-                            class="px-8 py-3 rounded-2xl font-semibold flex items-center gap-2 active-mode">
-                        <i class="fa-solid fa-microphone"></i> KARAOKE
-                    </button>
-                    <button onclick="setMode(2)" id="btnYoutube"
-                            class="px-8 py-3 rounded-2xl font-semibold flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700">
-                        <i class="fa-brands fa-youtube"></i> YOUTUBE
-                    </button>
+                    <button onclick="setMode(1)" id="btnKaraoke" class="px-8 py-3 rounded-2xl font-semibold flex items-center gap-2 active-mode"><i class="fa-solid fa-microphone"></i> KARAOKE</button>
+                    <button onclick="setMode(2)" id="btnYoutube" class="px-8 py-3 rounded-2xl font-semibold flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700"><i class="fa-brands fa-youtube"></i> YOUTUBE</button>
                 </div>
-                <button onclick="cancelarMusica()" 
-                        class="bg-red-600 hover:bg-red-500 px-6 py-3 rounded-2xl font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-ban"></i> CANCELAR MÚSICA
-                </button>
+                <button onclick="cancelarMusica()" class="bg-red-600 hover:bg-red-500 px-6 py-3 rounded-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-ban"></i> CANCELAR MÚSICA</button>
             </div>
         </div>
 
-        <!-- Barra de busca -->
         <div class="max-w-6xl mx-auto px-6 py-8">
             <div class="flex gap-4">
-                <input id="searchInput" 
-                       type="text" 
-                       value="cassia"
-                       placeholder="Digite o nome da música ou artista..."
-                       class="flex-1 bg-zinc-900 border border-zinc-700 rounded-3xl px-8 py-5 text-lg focus:outline-none focus:border-yellow-400">
-                <button onclick="buscar()" 
-                        class="bg-yellow-400 hover:bg-yellow-300 text-black font-bold px-12 rounded-3xl text-lg flex items-center gap-3">
-                    <i class="fa-solid fa-magnifying-glass"></i> PESQUISAR
-                </button>
+                <input id="searchInput" type="text" value="cassia" placeholder="Digite o nome da música ou artista..." class="flex-1 bg-zinc-900 border border-zinc-700 rounded-3xl px-8 py-5 text-lg focus:outline-none focus:border-yellow-400">
+                <button onclick="buscar()" class="bg-yellow-400 hover:bg-yellow-300 text-black font-bold px-12 rounded-3xl text-lg flex items-center gap-3"><i class="fa-solid fa-magnifying-glass"></i> PESQUISAR</button>
             </div>
         </div>
 
-        <!-- Resultados -->
         <div class="max-w-6xl mx-auto px-6">
-            <div id="loading" class="hidden text-center py-12 text-yellow-400 text-xl">
-                <i class="fa-solid fa-spinner fa-spin mr-3"></i> Buscando...
-            </div>
-            
-            <div id="results" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <!-- Cards gerados pelo JS -->
-            </div>
+            <div id="loading" class="hidden text-center py-12 text-yellow-400 text-xl"><i class="fa-solid fa-spinner fa-spin mr-3"></i> Buscando...</div>
+            <div id="results" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
         </div>
     </div>
 
-    <!-- MODAL CONFIRMAÇÃO -->
+    <!-- MODAL -->
     <div id="modalConfirm" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-[100]">
         <div class="modal bg-zinc-900 rounded-3xl w-full max-w-lg mx-4 overflow-hidden">
             <div class="p-8">
                 <h2 class="text-2xl font-bold text-center mb-6 text-yellow-400">CONFIRMAR ENVIO</h2>
                 <div id="modalText" class="text-center text-lg leading-relaxed min-h-[160px] text-zinc-300"></div>
             </div>
-            
             <div class="grid grid-cols-2 border-t border-zinc-700">
-                <button onclick="fecharModal()" 
-                        class="py-6 text-red-400 font-bold hover:bg-zinc-800 transition">CANCELAR</button>
-                <button onclick="confirmarEnvio()" 
-                        class="py-6 bg-emerald-500 text-black font-bold hover:bg-emerald-400 transition">CONFIRMAR ENVIO</button>
+                <button onclick="fecharModal()" class="py-6 text-red-400 font-bold hover:bg-zinc-800 transition">CANCELAR</button>
+                <button onclick="confirmarEnvio()" class="py-6 bg-emerald-500 text-black font-bold hover:bg-emerald-400 transition">CONFIRMAR ENVIO</button>
             </div>
         </div>
     </div>
@@ -124,15 +87,12 @@
             document.getElementById("loginScreen").classList.add("hidden");
             document.getElementById("mainScreen").classList.remove("hidden");
             setMode(2);
-            setTimeout(buscar, 300);
+            setTimeout(buscar, 5000);
         }
 
-        function setMode(mode) {
-            currentMode = mode;
-            document.getElementById("btnKaraoke").classList.toggle("active-mode", mode === 1);
-            document.getElementById("btnYoutube").classList.toggle("active-mode", mode === 2);
-        }
+        function setMode(mode) { currentMode = mode; document.getElementById("btnKaraoke").classList.toggle("active-mode", mode === 1); document.getElementById("btnYoutube").classList.toggle("active-mode", mode === 2); }
 
+        // ====================== BUSCA COM RETRY (2 tentativas) ======================
         async function buscar() {
             const query = document.getElementById("searchInput").value.trim();
             if (!query) return alert("Digite algo para pesquisar!");
@@ -142,71 +102,53 @@
             loading.classList.remove("hidden");
             resultsDiv.innerHTML = "";
 
-            try {
-                let data;
-                if (currentMode === 1) {
-                    const url = CHAMADA_KARAOKE + encodeURIComponent(query);
-                    const res = await fetch(url);
-                    data = await res.json();
-                    renderCards(data, 1);
-                } else {
-                    const apiUrl = URL_YOUTUBE_BASE + encodeURIComponent(query);
-                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
-                    const res = await fetch(proxyUrl);
-                    const proxyData = await res.json();
-                    const json = JSON.parse(proxyData.contents);
-                    data = json.results || [];
-                    renderCards(data, 2);
+            let success = false;
+            for (let tentativa = 1; tentativa <= 2; tentativa++) {
+                try {
+                    let data;
+                    if (currentMode === 1) {
+                        const url = CHAMADA_KARAOKE + encodeURIComponent(query);
+                        const res = await fetch(url);
+                        data = await res.json();
+                        renderCards(data, 1);
+                    } else {
+                        const apiUrl = URL_YOUTUBE_BASE + encodeURIComponent(query);
+                        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
+                        const res = await fetch(proxyUrl);
+                        const proxyData = await res.json();
+                        const json = JSON.parse(proxyData.contents);
+                        data = json.results || [];
+                        renderCards(data, 2);
+                    }
+                    success = true;
+                    break;
+                } catch (e) {
+                    console.log(`Tentativa ${tentativa} falhou:`, e);
+                    if (tentativa === 3) {
+                        resultsDiv.innerHTML = `<p class="col-span-full text-center py-20 text-red-400">❌ Erro na busca (tentamos 2x).<br>Proxy instável ou limite temporário.<br>Tente novamente ou use maiúsculas.</p>`;
+                    } else {
+                        await new Promise(r => setTimeout(r, 2000)); // espera 800ms antes da 2ª tentativa
+                    }
                 }
-            } catch (e) {
-                console.error(e);
-                resultsDiv.innerHTML = `<p class="col-span-full text-center py-20 text-red-400">❌ Erro na busca.<br>Tente novamente.</p>`;
-            } finally {
-                loading.classList.add("hidden");
             }
+            loading.classList.add("hidden");
         }
 
-        // ====================== CARDS COM EVENT LISTENER (AGORA SEM ERRO NO CLIQUE) ======================
         function renderCards(items, mode) {
             const resultsDiv = document.getElementById("results");
             resultsDiv.innerHTML = "";
-            
             if (!items || items.length === 0) {
                 resultsDiv.innerHTML = `<p class="col-span-full text-center py-20 text-zinc-400">Nenhum resultado encontrado</p>`;
                 return;
             }
-
             items.forEach(item => {
                 const card = document.createElement("div");
                 card.className = "card bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer";
-
                 if (mode === 1) {
-                    card.innerHTML = `
-                        <div class="p-6">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <p class="font-bold text-lg">${item.CANTOR || item.cantor || 'Desconhecido'}</p>
-                                    <p class="text-yellow-400 mt-1">${item.MUSICA || item.musica}</p>
-                                </div>
-                                <div class="bg-emerald-500 text-black text-xs font-mono px-3 py-1 rounded-full">
-                                    ${item.NUMERO || item.numero}
-                                </div>
-                            </div>
-                        </div>`;
+                    card.innerHTML = `<div class="p-6"><div class="flex justify-between items-start"><div><p class="font-bold text-lg">${item.CANTOR || item.cantor || 'Desconhecido'}</p><p class="text-yellow-400 mt-1">${item.MUSICA || item.musica}</p></div><div class="bg-emerald-500 text-black text-xs font-mono px-3 py-1 rounded-full">${item.NUMERO || item.numero}</div></div></div>`;
                 } else {
-                    card.innerHTML = `
-                        <div class="relative">
-                            <img src="${item.thumbnail}" class="w-full aspect-video object-cover">
-                            <div class="absolute bottom-3 right-3 bg-black/80 text-white text-xs px-3 py-1 rounded font-mono">
-                                ${item.duration}
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <p class="line-clamp-3 font-medium">${item.title}</p>
-                        </div>`;
+                    card.innerHTML = `<div class="relative"><img src="${item.thumbnail}" class="w-full aspect-video object-cover"><div class="absolute bottom-3 right-3 bg-black/80 text-white text-xs px-3 py-1 rounded font-mono">${item.duration}</div></div><div class="p-5"><p class="line-clamp-3 font-medium">${item.title}</p></div>`;
                 }
-
-                // ←←← AQUI ESTÁ A CORREÇÃO: clique seguro com addEventListener
                 card.addEventListener("click", () => abrirConfirmacao(item));
                 resultsDiv.appendChild(card);
             });
@@ -214,54 +156,27 @@
 
         function abrirConfirmacao(item) {
             currentSelected = item;
-            let html = "";
-
-            if (currentMode === 1) {
-                html = `
-                    <strong class="text-emerald-400">KARAOKE</strong><br>
-                    <span class="text-2xl">${item.CANTOR || item.cantor || ''}</span><br><br>
-                    <span class="text-xl">${item.MUSICA || item.musica}</span><br>
-                    <span class="text-sm text-zinc-500">CÓDIGO: <strong>${item.NUMERO || item.numero}</strong></span>
-                `;
-            } else {
-                html = `
-                    <strong class="text-red-400">YOUTUBE</strong><br>
-                    <span class="text-xl">${item.title}</span><br><br>
-                    <span class="text-sm text-zinc-400">Duração: ${item.duration}</span><br>
-                    <span class="text-sm text-zinc-500">ID: <strong>${item.id}</strong></span>
-                `;
-            }
-
+            let html = currentMode === 1 
+                ? `<strong class="text-emerald-400">KARAOKE</strong><br><span class="text-2xl">${item.CANTOR || item.cantor || ''}</span><br><br><span class="text-xl">${item.MUSICA || item.musica}</span><br><span class="text-sm text-zinc-500">CÓDIGO: <strong>${item.NUMERO || item.numero}</strong></span>`
+                : `<strong class="text-red-400">YOUTUBE</strong><br><span class="text-xl">${item.title}</span><br><br><span class="text-sm text-zinc-400">Duração: ${item.duration}</span><br><span class="text-sm text-zinc-500">ID: <strong>${item.id}</strong></span>`;
             document.getElementById("modalText").innerHTML = html;
             document.getElementById("modalConfirm").classList.remove("hidden");
         }
 
-        function fecharModal() {
-            document.getElementById("modalConfirm").classList.add("hidden");
-        }
+        function fecharModal() { document.getElementById("modalConfirm").classList.add("hidden"); }
 
         async function confirmarEnvio() {
             if (!currentSelected || !pairingId) return;
-            
-            let numeroParaEnviar = currentMode === 1 
-                ? (currentSelected.NUMERO || currentSelected.numero)
-                : "youtube" + currentSelected.id;
-            
-            const url = `${URL_ENVIAR}${pairingId}&numero=${numeroParaEnviar}`;
-            
-            try {
-                await fetch(url);
-                alert("✅ Enviado com sucesso!\nCódigo/ID enviado: " + numeroParaEnviar);
-            } catch (e) {
-                alert("❌ Erro ao enviar");
-            }
+            let numero = currentMode === 1 ? (currentSelected.NUMERO || currentSelected.numero) : "youtube" + currentSelected.id;
+            const url = `${URL_ENVIAR}${pairingId}&numero=${numero}`;
+            try { await fetch(url); alert("✅ Enviado! Código/ID: " + numero); } catch(e) { alert("❌ Erro ao enviar"); }
             fecharModal();
         }
 
         async function cancelarMusica() {
             if (!pairingId) return alert("Faça login primeiro!");
             const url = `${URL_ENVIAR}${pairingId}&numero=11111111110`;
-            try { await fetch(url); alert("⏹️ Música cancelada!"); } catch(e) { alert("Erro ao cancelar"); }
+            try { await fetch(url); alert("⏹️ Cancelado!"); } catch(e) { alert("Erro ao cancelar"); }
         }
 
         window.onload = () => {
