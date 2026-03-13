@@ -3,72 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karaokê + YouTube</title>
+    <title>Karaokê + YouTube </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        .card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3); }
-        .modal { animation: modalPop 0.3s ease-out; }
-        @keyframes modalPop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
-        .active-mode { background-color: #eab308 !important; color: black !important; font-weight: 700; }
+        .card { transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); }
+        .card:hover { transform: translateY(-12px) scale(1.03); box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4); }
+        .modal { animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes modalPop { from { opacity: 0; transform: scale(0.7) translateY(40px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .active-mode { background-color: #eab308 !important; color: #000 !important; font-weight: 700; box-shadow: 0 0 0 4px rgba(234, 179, 8, 0.3); }
+        .skeleton { background: linear-gradient(90deg, #27272a 25%, #3f3f46 50%, #27272a 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
+        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .toast { animation: toastIn 0.3s, toastOut 0.3s 2.7s forwards; }
+        @keyframes toastIn { from { transform: translateY(30px); opacity: 0; } }
+        @keyframes toastOut { to { transform: translateY(-30px); opacity: 0; } }
     </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
-    <!-- TELA DE LOGIN -->
+    <!-- LOGIN -->
     <div id="loginScreen" class="flex items-center justify-center min-h-screen bg-zinc-950">
-        <div class="bg-zinc-900 rounded-3xl shadow-2xl w-full max-w-md p-8 text-center">
-            <div class="mx-auto w-24 h-24 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-2xl flex items-center justify-center mb-6">
-                <i class="fa-solid fa-key text-5xl text-black"></i>
+        <div class="bg-zinc-900 rounded-3xl shadow-2xl w-full max-w-md p-10 text-center">
+            <div class="mx-auto w-28 h-28 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-3xl flex items-center justify-center mb-8 shadow-inner">
+                <i class="fa-solid fa-microphone-lines text-6xl text-black"></i>
             </div>
-            <h1 class="text-3xl font-bold mb-2">Bem-vindo ao Karaokê Online</h1>
-            <p class="text-zinc-400 mb-8">Digite seu ID de pareamento</p>
+            <h1 class="text-4xl font-bold tracking-tight mb-2">Karaokê On-line 2026</h1>
+            <p class="text-zinc-400 mb-10">Seu karaokê online com YouTube</p>
             
-            <input id="pairingInput" type="text" placeholder="🗝️ ID PAREAMENTO" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 text-lg focus:outline-none focus:border-yellow-400 mb-6">
-            <button onclick="fazerLogin()" class="w-full bg-violet-600 hover:bg-violet-500 py-4 rounded-2xl font-bold text-lg transition">ENTRAR</button>
+            <input id="pairingInput" type="text" placeholder="🗝️ ID DE PAREAMENTO" 
+                   class="w-full bg-zinc-800 border border-zinc-700 rounded-3xl px-8 py-5 text-lg focus:outline-none focus:border-yellow-400 transition-all">
+            <button onclick="fazerLogin()" 
+                    class="mt-6 w-full bg-gradient-to-r from-violet-600 to-amber-500 hover:brightness-110 py-5 rounded-3xl font-bold text-xl transition-all active:scale-95">
+                ENTRAR
+            </button>
         </div>
     </div>
 
     <!-- TELA PRINCIPAL -->
     <div id="mainScreen" class="hidden min-h-screen">
+        <!-- HEADER -->
         <div class="bg-zinc-900 border-b border-zinc-800 sticky top-0 z-50">
-            <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-                <div class="flex items-center gap-3"><span class="text-3xl">🎤</span><h1 class="text-2xl font-bold text-yellow-400">GarraKaraokê</h1></div>
-                <div class="flex gap-3">
-                    <button onclick="setMode(1)" id="btnKaraoke" class="px-8 py-3 rounded-2xl font-semibold flex items-center gap-2 active-mode"><i class="fa-solid fa-microphone"></i> KARAOKE</button>
-                    <button onclick="setMode(2)" id="btnYoutube" class="px-8 py-3 rounded-2xl font-semibold flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700"><i class="fa-brands fa-youtube"></i> YOUTUBE</button>
+            <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <span class="text-4xl">🎤</span>
+                    <h1 class="text-3xl font-bold text-yellow-400 tracking-tighter">GarraKaraokê</h1>
                 </div>
-                <button onclick="cancelarMusica()" class="bg-red-600 hover:bg-red-500 px-6 py-3 rounded-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-ban"></i> CANCELAR MÚSICA</button>
+                <div class="flex gap-3">
+                    <button onclick="setMode(1)" id="btnKaraoke" class="px-9 py-3.5 rounded-3xl font-semibold flex items-center gap-3 active-mode">
+                        <i class="fa-solid fa-microphone"></i> KARAOKE
+                    </button>
+                    <button onclick="setMode(2)" id="btnYoutube" class="px-9 py-3.5 rounded-3xl font-semibold flex items-center gap-3 bg-zinc-800 hover:bg-zinc-700">
+                        <i class="fa-brands fa-youtube"></i> YOUTUBE
+                    </button>
+                </div>
+                <button onclick="cancelarMusica()" class="bg-red-600 hover:bg-red-500 px-8 py-3.5 rounded-3xl font-bold flex items-center gap-3 transition-all">
+                    <i class="fa-solid fa-ban"></i> CANCELAR
+                </button>
             </div>
         </div>
 
-        <div class="max-w-6xl mx-auto px-6 py-8">
-            <div class="flex gap-4">
-                <input id="searchInput" type="text" value="cassia" placeholder="Digite o nome da música ou artista..." class="flex-1 bg-zinc-900 border border-zinc-700 rounded-3xl px-8 py-5 text-lg focus:outline-none focus:border-yellow-400">
-                <button onclick="buscar()" class="bg-yellow-400 hover:bg-yellow-300 text-black font-bold px-12 rounded-3xl text-lg flex items-center gap-3"><i class="fa-solid fa-magnifying-glass"></i> PESQUISAR</button>
+        <!-- SEARCH -->
+        <div class="max-w-6xl mx-auto px-6 py-10">
+            <div class="relative max-w-2xl mx-auto">
+                <div class="absolute left-6 top-1/2 -translate-y-1/2 text-zinc-400">
+                    <i class="fa-solid fa-magnifying-glass text-xl"></i>
+                </div>
+                <input id="searchInput" type="text" value="cassia" placeholder="Busque música ou artista..." 
+                       class="w-full bg-zinc-900 border border-zinc-700 rounded-3xl pl-14 pr-6 py-6 text-xl focus:outline-none focus:border-yellow-400 transition-all">
             </div>
         </div>
 
-        <div class="max-w-6xl mx-auto px-6">
-            <div id="loading" class="hidden text-center py-12 text-yellow-400 text-xl"><i class="fa-solid fa-spinner fa-spin mr-3"></i> Buscando...</div>
+        <!-- RESULTADOS -->
+        <div class="max-w-6xl mx-auto px-6 pb-12">
+            <div id="loading" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Skeletons -->
+                <div class="skeleton h-72 rounded-3xl"></div>
+                <div class="skeleton h-72 rounded-3xl"></div>
+                <div class="skeleton h-72 rounded-3xl"></div>
+                <div class="skeleton h-72 rounded-3xl"></div>
+            </div>
+            
             <div id="results" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+            
+            <!-- EMPTY STATE -->
+            <div id="emptyState" class="hidden text-center py-20">
+                <i class="fa-solid fa-music text-8xl text-zinc-700 mb-6"></i>
+                <p class="text-2xl text-zinc-400">Nenhum resultado encontrado</p>
+                <p class="text-zinc-500 mt-3">Tente outra palavra ou mude o modo</p>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="text-center py-8 text-zinc-500 text-sm border-t border-zinc-800">
+            GarraKaraokê • Feito com ❤️ para você cantar
+        </footer>
+    </div>
+
+    <!-- MODAL MELHORADO -->
+    <div id="modalConfirm" class="hidden fixed inset-0 bg-black/95 flex items-center justify-center z-[100]">
+        <div class="modal bg-zinc-900 rounded-3xl w-full max-w-xl mx-4 overflow-hidden">
+            <div class="p-8">
+                <h2 class="text-3xl font-bold text-center mb-8 text-yellow-400">CONFIRMAR ENVIO</h2>
+                <div id="modalText" class="text-center text-xl leading-relaxed min-h-[180px] text-zinc-300"></div>
+            </div>
+            <div class="grid grid-cols-2 border-t border-zinc-700">
+                <button onclick="fecharModal()" class="py-7 text-red-400 font-bold text-xl hover:bg-zinc-800 transition">CANCELAR</button>
+                <button onclick="confirmarEnvio()" class="py-7 bg-gradient-to-r from-emerald-500 to-green-500 text-black font-bold text-xl hover:brightness-110 transition">CONFIRMAR ENVIO</button>
+            </div>
         </div>
     </div>
 
-    <!-- MODAL -->
-    <div id="modalConfirm" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-[100]">
-        <div class="modal bg-zinc-900 rounded-3xl w-full max-w-lg mx-4 overflow-hidden">
-            <div class="p-8">
-                <h2 class="text-2xl font-bold text-center mb-6 text-yellow-400">CONFIRMAR ENVIO</h2>
-                <div id="modalText" class="text-center text-lg leading-relaxed min-h-[160px] text-zinc-300"></div>
-            </div>
-            <div class="grid grid-cols-2 border-t border-zinc-700">
-                <button onclick="fecharModal()" class="py-6 text-red-400 font-bold hover:bg-zinc-800 transition">CANCELAR</button>
-                <button onclick="confirmarEnvio()" class="py-6 bg-emerald-500 text-black font-bold hover:bg-emerald-400 transition">CONFIRMAR ENVIO</button>
-            </div>
-        </div>
+    <!-- TOAST -->
+    <div id="toast" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-yellow-400 text-yellow-400 px-8 py-4 rounded-3xl shadow-2xl flex items-center gap-3 toast">
+        <i id="toastIcon" class="text-2xl"></i>
+        <span id="toastText" class="font-medium"></span>
     </div>
 
     <script>
@@ -82,28 +131,33 @@
 
         function fazerLogin() {
             const id = document.getElementById("pairingInput").value.trim();
-            if (!id) return alert("Digite seu ID de pareamento!");
+            if (!id) return showToast("Digite seu ID!", "error");
             pairingId = id;
             document.getElementById("loginScreen").classList.add("hidden");
             document.getElementById("mainScreen").classList.remove("hidden");
             setMode(2);
-            setTimeout(buscar, 5000);
+            setTimeout(buscar, 300);
         }
 
-        function setMode(mode) { currentMode = mode; document.getElementById("btnKaraoke").classList.toggle("active-mode", mode === 1); document.getElementById("btnYoutube").classList.toggle("active-mode", mode === 2); }
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById("btnKaraoke").classList.toggle("active-mode", mode === 1);
+            document.getElementById("btnYoutube").classList.toggle("active-mode", mode === 2);
+        }
 
-        // ====================== BUSCA COM RETRY (2 tentativas) ======================
         async function buscar() {
             const query = document.getElementById("searchInput").value.trim();
-            if (!query) return alert("Digite algo para pesquisar!");
+            if (!query) return showToast("Digite algo para buscar!", "error");
 
             const loading = document.getElementById("loading");
             const resultsDiv = document.getElementById("results");
+            const empty = document.getElementById("emptyState");
             loading.classList.remove("hidden");
             resultsDiv.innerHTML = "";
+            empty.classList.add("hidden");
 
             let success = false;
-            for (let tentativa = 1; tentativa <= 2; tentativa++) {
+            for (let i = 1; i <= 2; i++) {
                 try {
                     let data;
                     if (currentMode === 1) {
@@ -123,11 +177,10 @@
                     success = true;
                     break;
                 } catch (e) {
-                    console.log(`Tentativa ${tentativa} falhou:`, e);
-                    if (tentativa === 3) {
-                        resultsDiv.innerHTML = `<p class="col-span-full text-center py-20 text-red-400">❌ Erro na busca (tentamos 2x).<br>Proxy instável ou limite temporário.<br>Tente novamente ou use maiúsculas.</p>`;
+                    if (i === 2) {
+                        empty.classList.remove("hidden");
                     } else {
-                        await new Promise(r => setTimeout(r, 2000)); // espera 800ms antes da 2ª tentativa
+                        await new Promise(r => setTimeout(r, 800));
                     }
                 }
             }
@@ -137,17 +190,35 @@
         function renderCards(items, mode) {
             const resultsDiv = document.getElementById("results");
             resultsDiv.innerHTML = "";
-            if (!items || items.length === 0) {
-                resultsDiv.innerHTML = `<p class="col-span-full text-center py-20 text-zinc-400">Nenhum resultado encontrado</p>`;
-                return;
-            }
+            if (!items || items.length === 0) return;
+
             items.forEach(item => {
                 const card = document.createElement("div");
-                card.className = "card bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer";
+                card.className = "card bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer relative";
+                
                 if (mode === 1) {
-                    card.innerHTML = `<div class="p-6"><div class="flex justify-between items-start"><div><p class="font-bold text-lg">${item.CANTOR || item.cantor || 'Desconhecido'}</p><p class="text-yellow-400 mt-1">${item.MUSICA || item.musica}</p></div><div class="bg-emerald-500 text-black text-xs font-mono px-3 py-1 rounded-full">${item.NUMERO || item.numero}</div></div></div>`;
+                    card.innerHTML = `
+                        <div class="p-6">
+                            <div class="flex justify-between">
+                                <div>
+                                    <p class="font-bold text-lg">${item.CANTOR || item.cantor || 'Desconhecido'}</p>
+                                    <p class="text-yellow-400 mt-1 line-clamp-2">${item.MUSICA || item.musica}</p>
+                                </div>
+                                <div class="bg-emerald-500 text-black text-xs font-mono px-4 py-2 rounded-2xl">${item.NUMERO || item.numero}</div>
+                            </div>
+                        </div>`;
                 } else {
-                    card.innerHTML = `<div class="relative"><img src="${item.thumbnail}" class="w-full aspect-video object-cover"><div class="absolute bottom-3 right-3 bg-black/80 text-white text-xs px-3 py-1 rounded font-mono">${item.duration}</div></div><div class="p-5"><p class="line-clamp-3 font-medium">${item.title}</p></div>`;
+                    card.innerHTML = `
+                        <div class="relative">
+                            <img src="${item.thumbnail}" class="w-full aspect-video object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-center justify-center">
+                                <i class="fa-solid fa-play text-6xl text-white/80"></i>
+                            </div>
+                            <div class="absolute bottom-3 right-3 bg-black/80 text-white text-xs px-3 py-1 rounded font-mono">${item.duration}</div>
+                        </div>
+                        <div class="p-5">
+                            <p class="line-clamp-3 font-medium">${item.title}</p>
+                        </div>`;
                 }
                 card.addEventListener("click", () => abrirConfirmacao(item));
                 resultsDiv.appendChild(card);
@@ -157,8 +228,9 @@
         function abrirConfirmacao(item) {
             currentSelected = item;
             let html = currentMode === 1 
-                ? `<strong class="text-emerald-400">KARAOKE</strong><br><span class="text-2xl">${item.CANTOR || item.cantor || ''}</span><br><br><span class="text-xl">${item.MUSICA || item.musica}</span><br><span class="text-sm text-zinc-500">CÓDIGO: <strong>${item.NUMERO || item.numero}</strong></span>`
-                : `<strong class="text-red-400">YOUTUBE</strong><br><span class="text-xl">${item.title}</span><br><br><span class="text-sm text-zinc-400">Duração: ${item.duration}</span><br><span class="text-sm text-zinc-500">ID: <strong>${item.id}</strong></span>`;
+                ? `<strong class="text-emerald-400">KARAOKE</strong><br><span class="text-3xl">${item.CANTOR || item.cantor || ''}</span><br><br><span class="text-2xl">${item.MUSICA || item.musica}</span><br><span class="text-sm text-zinc-500">CÓDIGO: <strong class="text-2xl">${item.NUMERO || item.numero}</strong></span>`
+                : `<strong class="text-red-400">YOUTUBE</strong><br><span class="text-3xl">${item.title}</span><br><br><span class="text-sm text-zinc-400">Duração: ${item.duration}</span><br><span class="text-sm text-zinc-500">ID: <strong class="text-2xl">${item.id}</strong></span>`;
+            
             document.getElementById("modalText").innerHTML = html;
             document.getElementById("modalConfirm").classList.remove("hidden");
         }
@@ -169,14 +241,30 @@
             if (!currentSelected || !pairingId) return;
             let numero = currentMode === 1 ? (currentSelected.NUMERO || currentSelected.numero) : "youtube" + currentSelected.id;
             const url = `${URL_ENVIAR}${pairingId}&numero=${numero}`;
-            try { await fetch(url); alert("✅ Enviado! Código/ID: " + numero); } catch(e) { alert("❌ Erro ao enviar"); }
+            try { 
+                await fetch(url); 
+                showToast("✅ Enviado com sucesso!", "success");
+            } catch(e) { 
+                showToast("❌ Erro ao enviar", "error");
+            }
             fecharModal();
         }
 
         async function cancelarMusica() {
-            if (!pairingId) return alert("Faça login primeiro!");
+            if (!pairingId) return showToast("Faça login primeiro!", "error");
             const url = `${URL_ENVIAR}${pairingId}&numero=11111111110`;
-            try { await fetch(url); alert("⏹️ Cancelado!"); } catch(e) { alert("Erro ao cancelar"); }
+            try { await fetch(url); showToast("⏹️ Música cancelada!", "success"); } catch(e) { showToast("Erro ao cancelar", "error"); }
+        }
+
+        function showToast(texto, tipo) {
+            const toast = document.getElementById("toast");
+            const icon = document.getElementById("toastIcon");
+            const text = document.getElementById("toastText");
+            
+            text.textContent = texto;
+            icon.className = tipo === "success" ? "fa-solid fa-check text-green-400" : "fa-solid fa-xmark text-red-400";
+            toast.classList.remove("hidden");
+            setTimeout(() => toast.classList.add("hidden"), 3000);
         }
 
         window.onload = () => {
