@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karaokê + YouTube </title>
+    <title>Karaoke On-line</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <style>
@@ -28,8 +28,8 @@
             <div class="mx-auto w-28 h-28 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-3xl flex items-center justify-center mb-8 shadow-inner">
                 <i class="fa-solid fa-microphone-lines text-6xl text-black"></i>
             </div>
-            <h1 class="text-4xl font-bold tracking-tight mb-2">Karaokê On-line 2026</h1>
-            <p class="text-zinc-400 mb-10">Seu karaokê online com YouTube</p>
+            <h1 class="text-4xl font-bold tracking-tight mb-2">Karaoke On-line</h1>
+            <p class="text-zinc-400 mb-10">Cante agora com YouTube!</p>
             
             <input id="pairingInput" type="text" placeholder="🗝️ ID DE PAREAMENTO" 
                    class="w-full bg-zinc-800 border border-zinc-700 rounded-3xl px-8 py-5 text-lg focus:outline-none focus:border-yellow-400 transition-all">
@@ -47,7 +47,7 @@
             <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <span class="text-4xl">🎤</span>
-                    <h1 class="text-3xl font-bold text-yellow-400 tracking-tighter">Karaokê On-line 2026</h1>
+                    <h1 class="text-3xl font-bold text-yellow-400 tracking-tighter">Karaoke On-line</h1>
                 </div>
                 <div class="flex gap-3">
                     <button onclick="setMode(1)" id="btnKaraoke" class="px-9 py-3.5 rounded-3xl font-semibold flex items-center gap-3 active-mode">
@@ -63,21 +63,22 @@
             </div>
         </div>
 
-        <!-- SEARCH -->
+        <!-- SEARCH COM BOTÃO BEM GRANDE -->
         <div class="max-w-6xl mx-auto px-6 py-10">
-            <div class="relative max-w-2xl mx-auto">
-                <div class="absolute left-6 top-1/2 -translate-y-1/2 text-zinc-400">
-                    <i class="fa-solid fa-magnifying-glass text-xl"></i>
-                </div>
-                <input id="searchInput" type="text" value="cassia" placeholder="Busque música ou artista..." 
-                       class="w-full bg-zinc-900 border border-zinc-700 rounded-3xl pl-14 pr-6 py-6 text-xl focus:outline-none focus:border-yellow-400 transition-all">
+            <div class="flex gap-4 max-w-2xl mx-auto">
+                <input id="searchInput" type="text" value="cassia" placeholder="Digite o nome da música ou artista..." 
+                       class="flex-1 bg-zinc-900 border border-zinc-700 rounded-3xl px-8 py-6 text-xl focus:outline-none focus:border-yellow-400 transition-all">
+                <button onclick="buscar()" 
+                        class="bg-gradient-to-r from-yellow-400 to-amber-500 hover:brightness-110 text-black font-bold px-14 rounded-3xl text-xl flex items-center gap-3 transition-all active:scale-95">
+                    <i class="fa-solid fa-magnifying-glass"></i> 
+                    PESQUISAR
+                </button>
             </div>
         </div>
 
         <!-- RESULTADOS -->
         <div class="max-w-6xl mx-auto px-6 pb-12">
             <div id="loading" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <!-- Skeletons -->
                 <div class="skeleton h-72 rounded-3xl"></div>
                 <div class="skeleton h-72 rounded-3xl"></div>
                 <div class="skeleton h-72 rounded-3xl"></div>
@@ -86,21 +87,18 @@
             
             <div id="results" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
             
-            <!-- EMPTY STATE -->
             <div id="emptyState" class="hidden text-center py-20">
                 <i class="fa-solid fa-music text-8xl text-zinc-700 mb-6"></i>
                 <p class="text-2xl text-zinc-400">Nenhum resultado encontrado</p>
-                <p class="text-zinc-500 mt-3">Tente outra palavra ou mude o modo</p>
             </div>
         </div>
 
-        <!-- FOOTER -->
         <footer class="text-center py-8 text-zinc-500 text-sm border-t border-zinc-800">
-            Karaoke On-line • Feito com ❤️ para você cantar
+            Karaoke On-line • Feito para você cantar
         </footer>
     </div>
 
-    <!-- MODAL MELHORADO -->
+    <!-- MODAL -->
     <div id="modalConfirm" class="hidden fixed inset-0 bg-black/95 flex items-center justify-center z-[100]">
         <div class="modal bg-zinc-900 rounded-3xl w-full max-w-xl mx-4 overflow-hidden">
             <div class="p-8">
@@ -177,11 +175,8 @@
                     success = true;
                     break;
                 } catch (e) {
-                    if (i === 2) {
-                        empty.classList.remove("hidden");
-                    } else {
-                        await new Promise(r => setTimeout(r, 800));
-                    }
+                    if (i === 2) empty.classList.remove("hidden");
+                    else await new Promise(r => setTimeout(r, 800));
                 }
             }
             loading.classList.add("hidden");
@@ -195,30 +190,10 @@
             items.forEach(item => {
                 const card = document.createElement("div");
                 card.className = "card bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer relative";
-                
                 if (mode === 1) {
-                    card.innerHTML = `
-                        <div class="p-6">
-                            <div class="flex justify-between">
-                                <div>
-                                    <p class="font-bold text-lg">${item.CANTOR || item.cantor || 'Desconhecido'}</p>
-                                    <p class="text-yellow-400 mt-1 line-clamp-2">${item.MUSICA || item.musica}</p>
-                                </div>
-                                <div class="bg-emerald-500 text-black text-xs font-mono px-4 py-2 rounded-2xl">${item.NUMERO || item.numero}</div>
-                            </div>
-                        </div>`;
+                    card.innerHTML = `<div class="p-6"><div class="flex justify-between"><div><p class="font-bold text-lg">${item.CANTOR || item.cantor || 'Desconhecido'}</p><p class="text-yellow-400 mt-1 line-clamp-2">${item.MUSICA || item.musica}</p></div><div class="bg-emerald-500 text-black text-xs font-mono px-4 py-2 rounded-2xl">${item.NUMERO || item.numero}</div></div></div>`;
                 } else {
-                    card.innerHTML = `
-                        <div class="relative">
-                            <img src="${item.thumbnail}" class="w-full aspect-video object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-center justify-center">
-                                <i class="fa-solid fa-play text-6xl text-white/80"></i>
-                            </div>
-                            <div class="absolute bottom-3 right-3 bg-black/80 text-white text-xs px-3 py-1 rounded font-mono">${item.duration}</div>
-                        </div>
-                        <div class="p-5">
-                            <p class="line-clamp-3 font-medium">${item.title}</p>
-                        </div>`;
+                    card.innerHTML = `<div class="relative"><img src="${item.thumbnail}" class="w-full aspect-video object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-center justify-center"><i class="fa-solid fa-play text-6xl text-white/80"></i></div><div class="absolute bottom-3 right-3 bg-black/80 text-white text-xs px-3 py-1 rounded font-mono">${item.duration}</div></div><div class="p-5"><p class="line-clamp-3 font-medium">${item.title}</p></div>`;
                 }
                 card.addEventListener("click", () => abrirConfirmacao(item));
                 resultsDiv.appendChild(card);
@@ -230,7 +205,6 @@
             let html = currentMode === 1 
                 ? `<strong class="text-emerald-400">KARAOKE</strong><br><span class="text-3xl">${item.CANTOR || item.cantor || ''}</span><br><br><span class="text-2xl">${item.MUSICA || item.musica}</span><br><span class="text-sm text-zinc-500">CÓDIGO: <strong class="text-2xl">${item.NUMERO || item.numero}</strong></span>`
                 : `<strong class="text-red-400">YOUTUBE</strong><br><span class="text-3xl">${item.title}</span><br><br><span class="text-sm text-zinc-400">Duração: ${item.duration}</span><br><span class="text-sm text-zinc-500">ID: <strong class="text-2xl">${item.id}</strong></span>`;
-            
             document.getElementById("modalText").innerHTML = html;
             document.getElementById("modalConfirm").classList.remove("hidden");
         }
@@ -241,12 +215,7 @@
             if (!currentSelected || !pairingId) return;
             let numero = currentMode === 1 ? (currentSelected.NUMERO || currentSelected.numero) : "youtube" + currentSelected.id;
             const url = `${URL_ENVIAR}${pairingId}&numero=${numero}`;
-            try { 
-                await fetch(url); 
-                showToast("✅ Enviado com sucesso!", "success");
-            } catch(e) { 
-                showToast("❌ Erro ao enviar", "error");
-            }
+            try { await fetch(url); showToast("✅ Enviado com sucesso!", "success"); } catch(e) { showToast("❌ Erro ao enviar", "error"); }
             fecharModal();
         }
 
@@ -260,7 +229,6 @@
             const toast = document.getElementById("toast");
             const icon = document.getElementById("toastIcon");
             const text = document.getElementById("toastText");
-            
             text.textContent = texto;
             icon.className = tipo === "success" ? "fa-solid fa-check text-green-400" : "fa-solid fa-xmark text-red-400";
             toast.classList.remove("hidden");
@@ -273,5 +241,3 @@
     </script>
 </body>
 </html>
-
-
